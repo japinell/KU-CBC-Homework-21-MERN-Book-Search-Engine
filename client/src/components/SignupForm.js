@@ -4,7 +4,7 @@ import { Form, Button, Alert } from "react-bootstrap";
 import { createUser } from "../utils/API";
 import Auth from "../utils/auth";
 
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import { ADD_USER } from "../utils/mutations";
 
 const SignupForm = () => {
@@ -48,7 +48,7 @@ const SignupForm = () => {
       });
 
       const { token, user } = await data.json();
-      // console.log(user);
+
       Auth.login(token);
     } catch (err) {
       throw new Error(`Error: ${err}`);
