@@ -1,4 +1,5 @@
 const jwt = require("jsonwebtoken");
+const { AuthenticationError } = require("apollo-server-express");
 
 // set token secret and expiration date
 const secret = "mysecretsshhhhh";
@@ -23,7 +24,7 @@ module.exports = {
       const { data } = jwt.verify(token, secret, { maxAge: expiration });
       req.user = data;
     } catch {
-      console.log("Invalid token");
+      throw new AuthenticationError("Invalid token!");
     }
 
     // return the request object so it can be passed to the resolver as `context`
