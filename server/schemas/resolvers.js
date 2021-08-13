@@ -5,6 +5,8 @@ const { AuthenticationError } = require("apollo-server-express");
 const resolvers = {
   Query: {
     me: async (parent, args, context) => {
+      console.log("Inside of me");
+      console.log(context.user);
       if (context.user) {
         return User.findOne({ _id: context.user._id }).populate("savedBooks");
       }
@@ -15,13 +17,11 @@ const resolvers = {
   },
   Mutation: {
     login: async (parent, { email, password }) => {
-      console.log(email);
       const user = await User.findOne({ email });
 
       if (!user) {
         throw new AuthenticationError("Invalid email address");
       }
-      console.log(user);
       const correctPw = await user.isCorrectPassword(password);
 
       if (!correctPw) {

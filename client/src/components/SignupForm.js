@@ -42,12 +42,13 @@ const SignupForm = () => {
       // if (!response.ok) {
       //   throw new Error("something went wrong!");
       // }
-
+      console.log("I am here");
       const data = await addUser({
-        variables: userFormData,
+        variables: { ...userFormData },
       });
 
-      const { token, user } = await data.json();
+      console.log(data);
+      const { token, user } = data;
 
       Auth.login(token);
     } catch (err) {
