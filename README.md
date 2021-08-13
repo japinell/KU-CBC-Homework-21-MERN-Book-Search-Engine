@@ -93,7 +93,7 @@ npm run develop
 
 ## Usage
 
-The application has been coded with a _mobile first_ approach in mind. It allows users to perform CRUD operations against a live **MongoDb** database using the following HTTP methods for REST APIs: _GET_ and _POST_. If you want to run the application in your development environment, make sure to follow the [Installation](#installation) instructions above; otherwise, the application has been deployed to [Heroku](https://ku-cbc-budget-tracker.herokuapp.com/) through a **CI/CD** pipeline, which also connects to a live **MongoDb Atlas** database.
+The application has been coded with a _mobile first_ approach in mind. It allows users to perform CRUD operations against a live **MongoDb** database using the following HTTP methods for REST APIs: _GET_ and _POST_. If you want to run the application in your development environment, make sure to follow the [Installation](#installation) instructions above; otherwise, the application has been deployed to [Heroku](https://ku-cbc-googlebooks.herokuapp.com/) through a **CI/CD** pipeline, which also connects to a live **MongoDb Atlas** database.
 
 ## License
 
