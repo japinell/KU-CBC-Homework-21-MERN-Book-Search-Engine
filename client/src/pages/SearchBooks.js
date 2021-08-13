@@ -79,12 +79,9 @@ const SearchBooks = () => {
 
     try {
       try {
-        console.log("Inside of handleSaveBook");
-        console.log(bookToSave);
-        const { data } = await saveBook({
+        await saveBook({
           variables: { book: bookToSave },
         });
-        console.log(data);
         window.location.reload();
       } catch (err) {
         console.log(err);
