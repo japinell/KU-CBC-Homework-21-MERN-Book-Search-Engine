@@ -1,3 +1,6 @@
+//
+//  Define the functions to manipulate the data from the schemas
+//
 import { gql } from "@apollo/client";
 
 export const LOGIN_USER = gql`

@@ -1,3 +1,6 @@
+//
+//  Function to retrieve to remove previously saved books from the user account
+//
 import React from "react";
 import {
   Jumbotron,
@@ -15,17 +18,17 @@ import { GET_ME } from "../utils/queries";
 import { REMOVE_BOOK } from "../utils/mutations";
 
 const SavedBooks = () => {
+  // Retrieve the list of books of the current user
   const { loading, data } = useQuery(GET_ME);
   const [removeBook, { error }] = useMutation(REMOVE_BOOK);
   const userData = data?.me ?? [];
 
-  console.log("Inside of SavedBooks");
-
-  // if data isn't here yet, say so
+  // If data isn't here yet, wait for it
   if (loading) {
     return <h2>LOADING...</h2>;
   }
-  // create function that accepts the book's mongo _id value as param and deletes the book from the database
+
+  // Function that accepts the book id value as param and deletes the book from the database
   const handleDeleteBook = async (bookId) => {
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
@@ -33,13 +36,14 @@ const SavedBooks = () => {
       return false;
     }
 
+    //  Remove the book from the database by means of the removeBook mutation
     try {
       await removeBook({
         variables: { bookId },
       });
       window.location.reload();
 
-      // upon success, remove book's id from localStorage
+      // Upon success, remove the book's id from localStorage
       removeBookId(bookId);
     } catch (err) {
       console.log(err);

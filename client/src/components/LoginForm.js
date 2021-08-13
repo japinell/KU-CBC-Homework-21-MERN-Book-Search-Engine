@@ -1,14 +1,15 @@
-// see SignupForm.js for comments
+//
+//  Functions to handle user login
+//
 import React, { useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 
-import { loginUser } from "../utils/API";
 import Auth from "../utils/auth";
-
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../utils/mutations";
 
 const LoginForm = () => {
+  //  Set the state for userFormData - Used to send data to the authentication API
   const [userFormData, setUserFormData] = useState({ email: "", password: "" });
   const [validated] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
@@ -23,21 +24,23 @@ const LoginForm = () => {
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
-    // check if form has everything (as per react-bootstrap docs)
+    // Check if form has everything (as per react-bootstrap docs)
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
       event.preventDefault();
       event.stopPropagation();
     }
 
+    // Authenticate the user by means of the login mutation
     try {
       const { data } = await login({
         variables: userFormData,
       });
+
+      //  Retrieve the token and authenticate the user with it
       const { token } = await data.login;
       Auth.login(token);
     } catch (err) {
-      // throw new Error(`Error: ${err}`);
       console.log(`Error: ${err}`);
       setShowAlert(true);
     }

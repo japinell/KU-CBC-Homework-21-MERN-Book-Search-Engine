@@ -1,3 +1,6 @@
+//
+//  Functions to call the search API and execute the mutations to save data to the MongoDb database
+//
 import React, { useState, useEffect } from "react";
 import {
   Jumbotron,
@@ -17,23 +20,25 @@ import { useMutation } from "@apollo/client";
 import { SAVE_BOOK } from "../utils/mutations";
 
 const SearchBooks = () => {
-  // create state for holding returned google api data
+  // Create a state for holding the returned data from the Google API
   const [searchedBooks, setSearchedBooks] = useState([]);
-  // create state for holding our search field data
+
+  // Create a state for holding the search field data
   const [searchInput, setSearchInput] = useState("");
 
-  // create state to hold saved bookId values
+  // Create a state to hold saved bookId values
   const [savedBookIds, setSavedBookIds] = useState(getSavedBookIds());
 
+  // Create a mutation to save books to the MongoDB database
   const [saveBook, { error }] = useMutation(SAVE_BOOK);
 
-  // set up useEffect hook to save `savedBookIds` list to localStorage on component unmount
-  // learn more here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
+  // Set up the useEffect hook to save the savedBookIds list to localStorage on component unmount
+  // More information here: https://reactjs.org/docs/hooks-effect.html#effects-with-cleanup
   useEffect(() => {
     return () => saveBookIds(savedBookIds);
   });
 
-  // create method to search for books and set state on form submit
+  // Function to search for books and set state on form submit
   const handleFormSubmit = async (event) => {
     event.preventDefault();
 
@@ -45,11 +50,12 @@ const SearchBooks = () => {
       const response = await searchGoogleBooks(searchInput);
 
       if (!response.ok) {
-        throw new Error("something went wrong!");
+        throw new Error("Something went wrong!");
       }
 
       const { items } = await response.json();
 
+      // Build an array of books with the data returned from the Google API
       const bookData = items.map((book) => ({
         bookId: book.id,
         authors: book.volumeInfo.authors || ["No author to display"],
@@ -58,6 +64,7 @@ const SearchBooks = () => {
         image: book.volumeInfo.imageLinks?.thumbnail || "",
       }));
 
+      // Render the books
       setSearchedBooks(bookData);
       setSearchInput("");
     } catch (err) {
@@ -65,12 +72,12 @@ const SearchBooks = () => {
     }
   };
 
-  // create function to handle saving a book to our database
+  // Function to handle saving a book to the MongoDB database
   const handleSaveBook = async (bookId) => {
-    // find the book in `searchedBooks` state by the matching id
+    // Find the book in searchedBooks state by matching the book id
     const bookToSave = searchedBooks.find((book) => book.bookId === bookId);
 
-    // get token
+    // Test if the user is authenticated - If not, return
     const token = Auth.loggedIn() ? Auth.getToken() : null;
 
     if (!token) {
@@ -78,6 +85,7 @@ const SearchBooks = () => {
     }
 
     try {
+      //  Save the book to the database by means of the saveBook mutation
       try {
         await saveBook({
           variables: { book: bookToSave },
@@ -87,7 +95,7 @@ const SearchBooks = () => {
         console.log(err);
       }
 
-      // if book successfully saves to user's account, save book id to state
+      // If the book save is successful, save the book id to state
       setSavedBookIds([...savedBookIds, bookToSave.bookId]);
     } catch (err) {
       console.log(`Error ${err}`);

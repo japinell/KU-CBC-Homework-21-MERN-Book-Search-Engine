@@ -1,3 +1,6 @@
+//
+//  Type Defs - Define the types of data included in the schemas
+//
 const { gql } = require("apollo-server-express");
 
 const typeDefs = gql`

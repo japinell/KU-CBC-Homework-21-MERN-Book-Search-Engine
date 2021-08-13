@@ -1,9 +1,11 @@
+//
+//  Main program
+//
 const express = require("express");
 const { ApolloServer } = require("apollo-server-express");
 const path = require("path");
-
+//
 const { typeDefs, resolvers } = require("./schemas");
-// Import `authMiddleware()` function to be configured with the Apollo Server
 const { authMiddleware } = require("./utils/auth");
 const db = require("./config/connection");
 
@@ -13,10 +15,11 @@ const app = express();
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  // Add context to our server so data from the `authMiddleware()` function can pass data to our resolver functions
+  // Add context to the Apollo Server so the authMiddleware() function can pass data to the resolver function
   context: authMiddleware,
 });
 
+// Start Apollo Server - Workaround to deal with error where the middleware would be applied before the server start
 async function startServerWithMiddleware() {
   await server.start();
   server.applyMiddleware({ app });

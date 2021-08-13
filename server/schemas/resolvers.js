@@ -1,12 +1,14 @@
+//
+//  Resolvers - Define the functions to populate the data from the schemas
+//
 const { User, Book } = require("../models");
 const { signToken } = require("../utils/auth");
 const { AuthenticationError } = require("apollo-server-express");
-
+//
 const resolvers = {
   Query: {
+    // Return the currently logged in user including their saved books
     me: async (parent, args, context) => {
-      console.log("Inside of me");
-      console.log(context.user);
       if (context.user) {
         return User.findOne({ _id: context.user._id }).populate("savedBooks");
       }
@@ -15,7 +17,9 @@ const resolvers = {
       );
     },
   },
+
   Mutation: {
+    // Return an authentication token after validating the user credentials
     login: async (parent, { email, password }) => {
       const user = await User.findOne({ email });
 
@@ -33,14 +37,15 @@ const resolvers = {
       return { token, user };
     },
 
+    //  Add a user to the database - Return the user and the authentication token
     addUser: async (parent, { username, email, password }) => {
       const user = await User.create({ username, email, password });
       const token = signToken(user);
       return { token, user };
     },
 
+    //  Save a book to the current user - Return an instance of the updated user
     saveBook: async (parent, { book }, context) => {
-      console.log("saveBook :> ");
       if (context.user) {
         const user = await User.findOneAndUpdate(
           { _id: context.user._id },
@@ -54,17 +59,14 @@ const resolvers = {
       );
     },
 
+    //  Remove a book from the current user - Return an instance of the updated user
     removeBook: async (parent, { bookId }, context) => {
-      console.log("Inside of removeBook");
       if (context.user) {
-        console.log("I am here");
-
         const user = await User.findOneAndUpdate(
           { _id: context.user._id },
           { $pull: { savedBooks: { bookId } } },
           { new: true }
         );
-        console.log(user);
         return user;
       }
       throw new AuthenticationError(
