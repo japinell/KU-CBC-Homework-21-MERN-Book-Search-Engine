@@ -55,9 +55,9 @@ THEN I am logged out of the site and presented with a menu with the options Sear
 
 ## Features
 
-On the technical architecture, the application features the use of the MVC paradigm with **Database Schemas**, the logical structure of the database, defined with **Mongoose** and persisting in **MongoDb**; **HTML** to enable the input and rendering of the application data; **Express.Js** and **Apollo Server** for route handling and file serving, and **Node.Js** for Javascript running.
+On the technical architecture, the application features the use of **React** to handle a responsive, stateful user interface; **GraphQL** for data query and manipulation with APIs; **Apollo Server**, a GraphQL Server that can use data from disparate sources; **Apollo Client**, a state management library to manage GraphQL operations; **Mongoose** and **MongoDB** to define the logical structure of the database and provide a means to manage the underlying data structures; **HTML**, **Bootstrap**, and **Javascript** to enable the input and client-side validation of the application data; **Express.Js** for route handling and file serving, and **Node.Js** for Javascript running.
 
-The application uses three schemas hosted on a **NoSQL** database, **MongoDb**, and accessed through **APIs** built on **GraphQL**: _User_, _Book_, and _Auth_ as shown below:
+The application uses three schemas hosted on the **NoSQL** database (**MongoDb**), which are accessed through **APIs** built on **GraphQL**: _User_, _Book_, and _Auth_ as shown below:
 
 ![Application schemas.](./images/schemas.png)
 
